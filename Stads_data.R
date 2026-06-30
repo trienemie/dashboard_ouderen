@@ -1,13 +1,50 @@
-# ============================================================
+# ==============================================================================
 # Stads_data.R
-# ============================================================
-# Cross-script dependencies:
-#   Produces: df_final     — full indicator table with organisation
-#                            metadata; used by downstream analyses.
-#             df_health    — health-relevant subset of df_final.
-#             df_<org>     — one data frame per health organisation,
-#                            for exploratory use.
-# ============================================================
+# Parse the Stad in Cijfers variable catalogue and filter to health indicators
+#
+# PURPOSE
+# -------
+# This script is the entry point for the older-adults health indicator dashboard
+# for the City of Antwerp. It parses the free-text DataSource field of the
+# variable catalogue into a structured organisation hierarchy, then filters the
+# full catalogue to the subset of indicators relevant to public health and welfare
+# of older adults. The result is a clean, joined indicator table ready for
+# downstream analysis and visualisation.
+#
+# DATA PROVENANCE
+# ---------------
+# Input:  VarDataReport_niet_beveiligd.csv
+#         Provided by Jerry Ruys (Stad in Cijfers, June 2026) as
+#         VarDataReport_niet_beveiligd.xlsx; converted to CSV externally.
+#         Contains 24,440 indicator rows across 274 unique DataSource values.
+#         813 rows carry a blank DataSource; all derived columns for these are NA.
+#
+# Output: output/sources_parsed.csv  — one row per unique DataSource value (274);
+#                                      used by all downstream analysis scripts for
+#                                      provider-level filtering and grouping.
+#         output/df_health.csv       — health-relevant indicator subset (~8,932 rows);
+#                                      used by downstream analysis and visualisation
+#                                      scripts.
+#
+# METHODOLOGY
+# -----------
+# ## Established frameworks used as anchors
+#
+# | Framework | Role in this script |
+# |---|---|
+# | None | This script is a data-preparation pipeline, not a statistical analysis. |
+#
+# ## Own methodological additions
+#
+# | Choice | Justification |
+# |---|---|
+# | Split DataSource on " - " / " – " to extract topic | First occurrence of either separator consistently delimits organisation from topic in the raw field |
+# | Treat "\|" and "," as equivalent hierarchy delimiters | Both are used interchangeably in the raw field; normalising to "," enables a single split step |
+# | Promote "Vlaamse Gemeenschap > Departement Zorg" to top-level "Departement Zorg" | The department operates independently in practice; its parent is an administrative artefact in the catalogue |
+# | Normalise capitalisation variants (IMA, POD, FOD) | Identified by frequency inspection of unique organisation values; ensures consistent grouping |
+# | Health organisation selection (14 organisations) | Agreed in consultation with the Health department of Stad Antwerpen and Stad in Cijfers (README.md, STAP 3) |
+# | Case-insensitive health filter | Guards against future capitalisation drift without requiring duplicate list entries |
+# ==============================================================================
 
 library(here)
 library(dplyr)
@@ -116,10 +153,10 @@ df_final <- stads_data |>
 
 # === FILTER HEALTH INDICATORS ================================
 # INTENT: Isolate the subset of indicators provided by organisations
-# relevant to public health and social welfare, as required by the
-# older-adults dashboard.
-# Own addition: the list of organisations reflects the thematic scope
-# of the project as scoped in the project brief.
+# relevant to public health and social welfare of older adults.
+# Own addition: the list of 14 organisations was agreed in consultation
+# with the Health department of Stad Antwerpen and Stad in Cijfers
+# (README.md, STAP 3; Katrien De Troeyer, June 2026).
 
 health_organisations <- c(
   "Statbel",
@@ -156,8 +193,24 @@ organisations <- unique(sources$organisation)
 # inspection outside R and for use in downstream reporting tools.
 
 dir.create(here::here("output"), showWarnings = FALSE)
-write.csv(sources,   here::here("output", "sources_parsed.csv"), row.names = FALSE)
-write.csv(df_health, here::here("output", "df_health.csv"),      row.names = FALSE)
+
+# Columns — output/sources_parsed.csv (one row per unique DataSource value):
+#   DataSource           — raw string as it appears in the input file; primary key
+#   provinces_in_figures — factor "yes"/"no"; "yes" if sourced via provincies.incijfers.be
+#   topic                — substring after the first " - " or " – "; NA if absent
+#   organisation         — top-level provider name; NA for blank DataSource rows
+#   subdivision_1        — first sub-level of organisation hierarchy; NA if absent
+#   subdivision_2        — second sub-level; NA if absent
+#   subdivision_3        — third sub-level; NA if absent (only 3 sources reach this depth)
+write.csv(sources, here::here("output", "sources_parsed.csv"), row.names = FALSE)
+
+# Columns — output/df_health.csv (one row per indicator, health organisations only):
+#   [all original columns from VarDataReport_niet_beveiligd.csv, plus:]
+#   provinces_in_figures — see sources_parsed.csv
+#   topic                — see sources_parsed.csv
+#   organisation         — canonical provider name after normalisation
+#   subdivision_1/2/3    — provider sub-levels; NA if absent
+write.csv(df_health, here::here("output", "df_health.csv"), row.names = FALSE)
 
 # ============================================================
 
