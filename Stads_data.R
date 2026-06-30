@@ -48,6 +48,14 @@ sources <- data.frame(DataSource = unique(stads_data$DataSource)) |>
 # INTENT: Establish how many sub-division levels exist across all
 # sources, then widen into a rectangular structure so each level
 # occupies its own column.
+# Own addition: the pipe "|" and comma "," are both used as hierarchy
+# delimiters in DataSource; after normalisation they are treated
+# identically. Known limitations (not fixed — require domain knowledge):
+#   - Multiple " - " in one string: intermediate segment lands in topic
+#     rather than a subdivision column (~5 sources affected).
+#   - Comma used as co-author separator (not hierarchy) is
+#     indistinguishable from a hierarchy delimiter (~5 sources).
+#   - 813 blank DataSource rows → all derived columns are NA.
 
 splits    <- str_split(sources$rest, "\\s*,\\s*")
 max_parts <- max(map_int(splits, length))
@@ -81,6 +89,24 @@ sources <- sources |>
   ) |>
   select(-.is_dep_zorg)
 
+# === NORMALISE ORGANISATION NAMES ============================
+# INTENT: Collapse known capitalisation variants into a single
+# canonical form at source, so that all downstream grouping and
+# filtering on `organisation` yields consistent results.
+# Own addition: variants identified by inspecting unique values in
+# the raw DataSource field.
+
+sources <- sources |>
+  mutate(
+    organisation = case_when(
+      str_to_lower(organisation) == "intermutualistisch agentschap" ~ "Intermutualistisch Agentschap",
+      str_to_lower(organisation) == "pod maatschappelijke integratie" ~ "POD Maatschappelijke Integratie",
+      str_to_lower(organisation) == "fod volksgezondheid" ~ "FOD Volksgezondheid",
+      organisation == "" ~ NA_character_,
+      .default = organisation
+    )
+  )
+
 # === JOIN SOURCES TO INDICATOR DATA ==========================
 # INTENT: Attach organisation metadata to every indicator row so
 # downstream scripts can filter by provider.
@@ -103,18 +129,19 @@ health_organisations <- c(
   "Statistiek Vlaanderen",
   "Directie-generaal Personen met een handicap & Vlaamse Sociale Bescherming",
   "Departement Zorg",
-  "InterMutualistisch Agentschap",
-  "Antwerpse Gezondheidsenquête",
+  "Intermutualistisch Agentschap",
+  "Antwerpse Gezondheidsenquete",     # raw data has no accent ê
   "Stichting Kankerregister",
   "FOD Volksgezondheid",
-  "FOD volksgezondheid",
   "Stad in Cijfers",
   "Vlaamse Sociale Bescherming",
-  "POD Maatschappelijke integratie"
+  "POD Maatschappelijke Integratie"
 )
 
+# Own addition: case-insensitive match guards against future capitalisation
+# drift in the raw DataSource field without requiring duplicate list entries.
 df_health <- df_final |>
-  filter(organisation %in% health_organisations)
+  filter(str_to_lower(organisation) %in% str_to_lower(health_organisations))
 
 # Split into one data frame per organisation for exploratory use
 for (org in unique(df_health$organisation)) {
@@ -124,6 +151,14 @@ for (org in unique(df_health$organisation)) {
 
 organisations <- unique(sources$organisation)
 
+# === EXPORT ==================================================
+# INTENT: Persist parsed source metadata and health subset for
+# inspection outside R and for use in downstream reporting tools.
+
+dir.create(here::here("output"), showWarnings = FALSE)
+write.csv(sources,   here::here("output", "sources_parsed.csv"), row.names = FALSE)
+write.csv(df_health, here::here("output", "df_health.csv"),      row.names = FALSE)
+
 # ============================================================
 
 message(
@@ -132,5 +167,6 @@ message(
   "  Unique data sources parsed:        ", nrow(sources), "\n",
   "  Unique organisations:              ", length(organisations), "\n",
   "  Health-relevant rows:              ", nrow(df_health), "\n",
-  "  Organisations in health subset:    ", length(unique(df_health$organisation))
+  "  Organisations in health subset:    ", length(unique(df_health$organisation)), "\n",
+  "  Exported: output/sources_parsed.csv, output/df_health.csv"
 )
