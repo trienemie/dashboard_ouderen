@@ -16,7 +16,7 @@ Het bestand **`VarDataReport_niet_beveiligd.xlsx`** werd aangeleverd door Jerry 
 > **Datakwaliteit — DataSource:**
 > De kolom *DataSource* bevat 274 unieke waarden, maar één daarvan is een lege string
 > (geen bronvermelding). Die lege waarde is gekoppeld aan 813 rijen (~3,3 % van het
-> totaal); alle afgeleide velden (*organisation*, *topic*, *subdivision*) zijn voor
+> totaal); alle afgeleide velden (*data_owner*, *topic*, *subdivision*) zijn voor
 > deze rijen NA. Het effectieve aantal benoemde databronnen bedraagt dus **273**.
 
 ---
@@ -29,8 +29,8 @@ te structureren (`Stads_data.R`):
 - Er werd een extra kolom toegevoegd die aangeeft of de gegevens afkomstig zijn van
   **Provincies in Cijfers** (`provinces_in_figures`: yes/no).
 - De overige informatie werd opgesplitst in afzonderlijke velden:
-  **organisation**, **topic**, **subdivision\_1**, **subdivision\_2** en **subdivision\_3**.
-- Organisaties die onder verschillende benamingen of kapitalisaties voorkwamen, werden
+  **data_owner**, **topic**, **subdivision\_1**, **subdivision\_2** en **subdivision\_3**.
+- Data-eigenaars die onder verschillende benamingen of kapitalisaties voorkwamen, werden
   uniform gecodeerd (o.a. *Intermutualistisch Agentschap*, *POD Maatschappelijke
   Integratie*, *FOD Volksgezondheid*).
 
@@ -42,18 +42,18 @@ bronvermelding).
 
 ### STAP 3 — Selectie van gezondheidsgerelateerde organisaties
 
-Op basis van de gestructureerde bronnenlijst werden, uit de 123 benoemde organisaties,
-de organisaties geselecteerd die mogelijk gegevens aanleveren over de gezondheid en/of
+Op basis van de gestructureerde bronnenlijst werden, uit de 123 benoemde data-eigenaars,
+de data-eigenaars geselecteerd die mogelijk gegevens aanleveren over de gezondheid en/of
 het welzijn van ouderen. Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
 van de Stad Antwerpen en met *Stad in Cijfers*.
 
-De selectie omvat **15 organisaties** en resulteert in een subset van **8.956 variabelen**.
+De selectie omvat **15 data-eigenaars** en resulteert in een subset van **8.956 variabelen**.
 
 ---
 
 ### STAP 4 — Codering per variabele
 
-Voor elke geselecteerde organisatie werd een afzonderlijk tabblad aangemaakt. Per
+Voor elke geselecteerde data-eigenaar werd een afzonderlijk tabblad aangemaakt. Per
 variabele werd aangegeven of deze informatie bevat over ouderen:
 
 - **Ja** (groen): de variabele bevat informatie over ouderen.
