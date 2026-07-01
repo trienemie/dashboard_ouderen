@@ -37,9 +37,6 @@ te structureren (`Stads_data.R`):
 Na herstructurering zijn er **123 benoemde organisaties** (plus 1 categorie zonder
 bronvermelding).
 
-> **Noot:** de originele telling vermeldde 123 organisaties. Het verschil is te wijten
-> aan de geautomatiseerde normalisatie van kapitalisatievarianten, waarbij dubbele
-> vermeldingen werden samengevoegd.
 
 ---
 
@@ -50,7 +47,7 @@ de organisaties geselecteerd die mogelijk gegevens aanleveren over de gezondheid
 het welzijn van ouderen. Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
 van de Stad Antwerpen en met *Stad in Cijfers*.
 
-De selectie omvat **15 organisaties** en resulteert in een subset van **8.933 variabelen**.
+De selectie omvat **15 organisaties** en resulteert in een subset van **8.956 variabelen**.
 
 ---
 
