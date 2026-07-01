@@ -50,7 +50,7 @@ de organisaties geselecteerd die mogelijk gegevens aanleveren over de gezondheid
 het welzijn van ouderen. Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
 van de Stad Antwerpen en met *Stad in Cijfers*.
 
-De selectie omvat **14 organisaties** en resulteert in een subset van **8.932 variabelen**.
+De selectie omvat **15 organisaties** en resulteert in een subset van **8.933 variabelen**.
 
 ---
 
