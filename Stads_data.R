@@ -224,5 +224,7 @@ for (org in unique(df_gezondheid$Organisatie)) {
 Organisaties = unique(Sources$Organisatie)
 # 
 # writexl::write_xlsx(df_vlaamse_sociale_bescherming, 'df_vlaamse_sociale_bescherming.xlsx')
-# 
+
+
+
 
