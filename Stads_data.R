@@ -56,7 +56,7 @@ library(purrr)
 # INTENT: Read the variable data report so all downstream sections
 # work from a single, consistently loaded source.
 
-stads_data <- read.csv(here::here("VarDataReport_niet_beveiligd.csv"))
+stads_data <- read.csv2(here::here("VarDataReport_niet_beveiligd.csv"))
 
 # === PARSE DATA SOURCES ======================================
 # INTENT: Determine which organisation (and sub-division) is
@@ -172,7 +172,8 @@ health_organisations <- c(
   "FOD Volksgezondheid",
   "Stad in Cijfers",
   "Vlaamse Sociale Bescherming",
-  "POD Maatschappelijke Integratie"
+  "POD Maatschappelijke Integratie", 
+  "Expertisecentrum Dementie Vlaanderen"
 )
 
 # Own addition: case-insensitive match guards against future capitalisation
@@ -186,16 +187,16 @@ for (org in unique(df_health$organisation)) {
   assign(obj_name, df_health |> filter(organisation == org))
 }
 
-<<<<<<< HEAD
-Organisaties = unique(Sources$Organisatie)
+# <<<<<<< HEAD
+Organisaties = unique(sources$Organisatie)
 # 
 # writexl::write_xlsx(df_vlaamse_sociale_bescherming, 'df_vlaamse_sociale_bescherming.xlsx')
 
 
 
-=======
+# =======
 organisations <- unique(sources$organisation)
->>>>>>> 71e124ed7a6928f9f233d80d4bc90b484403096f
+# >>>>>>> 71e124ed7a6928f9f233d80d4bc90b484403096f
 
 # === EXPORT ==================================================
 # INTENT: Persist parsed source metadata and health subset for
