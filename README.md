@@ -34,7 +34,7 @@ te structureren (`Stads_data.R`):
   uniform gecodeerd (o.a. *Intermutualistisch Agentschap*, *POD Maatschappelijke
   Integratie*, *FOD Volksgezondheid*).
 
-Na herstructurering zijn er **125 benoemde organisaties** (plus 1 categorie zonder
+Na herstructurering zijn er **123 benoemde organisaties** (plus 1 categorie zonder
 bronvermelding).
 
 > **Noot:** de originele telling vermeldde 123 organisaties. Het verschil is te wijten
@@ -45,7 +45,7 @@ bronvermelding).
 
 ### STAP 3 — Selectie van gezondheidsgerelateerde organisaties
 
-Op basis van de gestructureerde bronnenlijst werden, uit de 125 benoemde organisaties,
+Op basis van de gestructureerde bronnenlijst werden, uit de 123 benoemde organisaties,
 de organisaties geselecteerd die mogelijk gegevens aanleveren over de gezondheid en/of
 het welzijn van ouderen. Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
 van de Stad Antwerpen en met *Stad in Cijfers*.
