@@ -139,8 +139,11 @@ sources <- sources |>
       str_to_lower(organisation) == "intermutualistisch agentschap" ~ "Intermutualistisch Agentschap",
       str_to_lower(organisation) == "pod maatschappelijke integratie" ~ "POD Maatschappelijke Integratie",
       str_to_lower(organisation) == "fod volksgezondheid" ~ "FOD Volksgezondheid",
-      organisation == "" ~ NA_character_,
-      .default = organisation
+      str_to_lower(organisation) == "Agentschap Zorg en Gezondheid" ~ "Departement Zorg",
+      str_to_lower(organisation) == "Centrum voor Kankeropsporing vzw" ~ "Centrum voor Kankeropsporing",
+      str_to_lower(organisation) == "fod_financien" ~ "FOD Financi�n" ,
+
+            .default = organisation
     )
   )
 
