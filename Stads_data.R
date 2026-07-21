@@ -142,7 +142,8 @@ sources <- sources |>
       str_to_lower(organisation) == "agentschap zorg en gezondheid" ~ "Departement Zorg",
       str_to_lower(organisation) == "centrum voor kankeropsporing vzw" ~ "Centrum voor Kankeropsporing",
       str_to_lower(organisation) == "fod_financien" ~ "FOD Financi�n" ,
-
+      str_to_lower(organisation) == "kind en gezin" ~ "Opgroeien" ,
+      str_to_lower(organisation) == "studiedienst vlaamse regering" ~ "Statistiek Vlaanderen" ,
             .default = organisation
     )
   )
@@ -152,7 +153,10 @@ sources <- sources |>
 # downstream scripts can filter by provider.
 
 df_final <- stads_data |>
-  left_join(sources, by = "DataSource")
+  left_join(sources, by = "DataSource")|>
+  mutate(
+    End.period = str_extract(as.character(End.period), "\\d{4}") |> as.numeric()
+  )
 
 # === FILTER HEALTH INDICATORS ================================
 # INTENT: Isolate the subset of indicators provided by organisations
@@ -162,36 +166,74 @@ df_final <- stads_data |>
 # (README.md, STAP 3; Katrien De Troeyer, June 2026).
 
 health_organisations <- c(
-  "Statbel",
-  "Stadsmonitor",
-  "Stad Antwerpen",
   "OCMW",
   "Statistiek Vlaanderen",
   "Directie-generaal Personen met een handicap & Vlaamse Sociale Bescherming",
   "Departement Zorg",
   "Intermutualistisch Agentschap",
-  "Antwerpse Gezondheidsenquete",     # raw data has no accent ê
   "Stichting Kankerregister",
   "FOD Volksgezondheid",
-  "Stad in Cijfers",
-  "Vlaamse Sociale Bescherming",
   "POD Maatschappelijke Integratie", 
-  "Expertisecentrum Dementie Vlaanderen"
-)
+  "Expertisecentrum Dementie Vlaanderen", 
+  "Survey stadsmonitor"
+  )
+
+health_organisations_possibly <- c( "Centrum voor Kankeropsporing",
+                                    "Rijksdienst voor Sociale Zekerheid",
+                                    "Stad Antwerpen",
+                                    "Antwerpse Gezondheidsenquete")    # raw data has no accent ê)
 
 # Own addition: case-insensitive match guards against future capitalisation
 # drift in the raw DataSource field without requiring duplicate list entries.
 df_health <- df_final |>
-  filter(str_to_lower(organisation) %in% str_to_lower(health_organisations))
+  filter(str_to_lower(organisation) %in% str_to_lower(health_organisations))%>%
+  filter(End.period >= 2023 | is.na(End.period)) |>
+  select(
+    organisation,
+    Code,
+    Name,
+    topic,
+    subdivision_1,
+    subdivision_2,
+    subdivision_3,
+    Start.period,
+    End.period, 
+    provinces_in_figures) |>
+  arrange(organisation)
 
 # Split into one data frame per organisation for exploratory use
 for (org in unique(df_health$organisation)) {
   obj_name <- paste0("df_", tolower(gsub("[^a-zA-Z0-9]", "_", org)))
-  assign(obj_name, df_health |> filter(organisation == org))
+  assign(obj_name, df_health |> filter(organisation == org)|> select(-organisation))
+}
+
+
+df_health_possibly <- df_final |>
+  filter(str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly))%>%
+filter(End.period >= 2019 | is.na(End.period)) |>
+  select(
+    organisation, 
+    Code,
+    Name,
+    topic,
+    subdivision_1,
+    subdivision_2,
+    subdivision_3,
+    Start.period,
+    End.period, 
+    provinces_in_figures
+  )|>
+  arrange(organisation)
+
+
+# Split into one data frame per organisation for exploratory use
+for (org in unique(df_health_possibly$organisation)) {
+  obj_name <- paste0("df_psbl_", tolower(gsub("[^a-zA-Z0-9]", "_", org)))
+  assign(obj_name, df_health_possibly |> filter(organisation == org)|> select(-organisation))
 }
 
 # <<<<<<< HEAD
-Organisaties = unique(sources$Organisatie)
+# Organisaties = unique(sources$Organisatie)
 # 
 # writexl::write_xlsx(df_vlaamse_sociale_bescherming, 'df_vlaamse_sociale_bescherming.xlsx')
 
@@ -224,6 +266,7 @@ write.csv(sources, here::here("output", "sources_parsed.csv"), row.names = FALSE
 #   organisation         — canonical provider name after normalisation
 #   subdivision_1/2/3    — provider sub-levels; NA if absent
 write.csv(df_health, here::here("output", "df_health.csv"), row.names = FALSE)
+write.csv(df_health_possibly, here::here("output", "df_health_possible.csv"), row.names = FALSE)
 
 # ============================================================
 
@@ -233,6 +276,8 @@ message(
   "  Unique data sources parsed:        ", nrow(sources), "\n",
   "  Unique organisations:              ", length(organisations), "\n",
   "  Health-relevant rows:              ", nrow(df_health), "\n",
+  "  Possible health-relevant:          ", nrow(df_health_possibly), "\n",
   "  Organisations in health subset:    ", length(unique(df_health$organisation)), "\n",
+  "  Organisation in possibly health related:",  length(unique(df_health_possibly$organisation)), "\n",
   "  Exported: output/sources_parsed.csv, output/df_health.csv"
 )
