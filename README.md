@@ -16,8 +16,7 @@ Het bestand **`VarDataReport_niet_beveiligd.xlsx`** werd aangeleverd door Jerry 
 > **Datakwaliteit — DataSource:**
 > De kolom *DataSource* bevat 274 unieke waarden, maar één daarvan is een lege string
 > (geen bronvermelding). Die lege waarde is gekoppeld aan 813 rijen (~3,3 % van het
-> totaal); alle afgeleide velden (*data_owner*, *topic*, *subdivision*) zijn voor
-> deze rijen NA. Het effectieve aantal benoemde databronnen bedraagt dus **273**.
+> totaal). Het effectieve aantal benoemde databronnen bedraagt dus **273**.
 
 ---
 
@@ -34,7 +33,7 @@ te structureren (`Stads_data.R`):
   uniform gecodeerd (o.a. *Intermutualistisch Agentschap*, *POD Maatschappelijke
   Integratie*, *FOD Volksgezondheid*).
 
-Na herstructurering zijn er **123 benoemde organisaties** (plus 1 categorie zonder
+Na herstructurering zijn er **121 benoemde organisaties** (plus 1 categorie zonder
 bronvermelding).
 
 
@@ -42,12 +41,12 @@ bronvermelding).
 
 ### STAP 3 — Selectie van gezondheidsgerelateerde organisaties
 
-Op basis van de gestructureerde bronnenlijst werden, uit de 123 benoemde data-eigenaars,
+Op basis van de gestructureerde bronnenlijst werden, uit de 121 benoemde data-eigenaars,
 de data-eigenaars geselecteerd die mogelijk gegevens aanleveren over de gezondheid en/of
 het welzijn van ouderen. Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
 van de Stad Antwerpen en met *Stad in Cijfers*.
 
-De selectie omvat **15 data-eigenaars** en resulteert in een subset van **8.956 variabelen**.
+De selectie omvat **11 data-eigenaars** en resulteert in een subset van **1.886 variabelen**. Daarnaast worden **3 data-eigenaars** ook verder geïnspecteerd omdat zij mogelijks ook gezondheids-gerelateerde informatie van ouderen bevatten. Hierbij gaat het over een subset van **3791 variabelen**.
 
 ---
 
