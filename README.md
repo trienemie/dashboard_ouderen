@@ -43,10 +43,11 @@ bronvermelding).
 
 Op basis van de gestructureerde bronnenlijst werden, uit de 121 benoemde data-eigenaars,
 de data-eigenaars geselecteerd die mogelijk gegevens aanleveren over de gezondheid en/of
-het welzijn van ouderen. Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
+het welzijn van ouderen. Bovendien werden enkel deze variabelen geselecteerd waarvan er gegevens beschikbaar zijn na 2024 (TE BESPREKEN MET DE STAD!!).Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
 van de Stad Antwerpen en met *Stad in Cijfers*.
 
-De selectie omvat **11 data-eigenaars** en resulteert in een subset van **1.886 variabelen**. Daarnaast worden **3 data-eigenaars** ook verder geïnspecteerd omdat zij mogelijks ook gezondheids-gerelateerde informatie van ouderen bevatten. Hierbij gaat het over een subset van **3791 variabelen**.
+De selectie omvat **10 data-eigenaars** en resulteert in een subset van **1.433 variabelen**. 
+Daarnaast worden **4 data-eigenaars** ook verder geïnspecteerd omdat zij mogelijks ook gezondheids-gerelateerde informatie van ouderen bevatten. Hierbij werden variabelen geselecteerd die gegevens hebben na 2018 (TE BESPREKEN MET DE STAD!!). Hierbij gaat het over een subset van **3785 variabelen**.
 
 ---
 
