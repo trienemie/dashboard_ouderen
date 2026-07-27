@@ -210,7 +210,7 @@ for (org in unique(df_health$organisation)) {
 
 df_health_possibly <- df_final |>
   filter(str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly))%>%
-filter(End.period >= 2019 | is.na(End.period)) |>
+filter(End.period >= 2023 | is.na(End.period)) |>
   select(
     organisation, 
     Code,
@@ -225,6 +225,23 @@ filter(End.period >= 2019 | is.na(End.period)) |>
   )|>
   arrange(organisation)
 
+
+df_health_older <- df_final |>
+  filter(str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly)|str_to_lower(health_organisations_possibly))%>%
+  filter(End.period <= 2023 | is.na(End.period)) |>
+  select(
+    organisation, 
+    Code,
+    Name,
+    topic,
+    subdivision_1,
+    subdivision_2,
+    subdivision_3,
+    Start.period,
+    End.period, 
+    provinces_in_figures
+  )|>
+  arrange(organisation)
 
 # Split into one data frame per organisation for exploratory use
 for (org in unique(df_health_possibly$organisation)) {
@@ -277,6 +294,7 @@ message(
   "  Unique organisations:              ", length(organisations), "\n",
   "  Health-relevant rows:              ", nrow(df_health), "\n",
   "  Possible health-relevant:          ", nrow(df_health_possibly), "\n",
+  "  Older health-relevant:             ", nrow(df_health_older), "\n",
   "  Organisations in health subset:    ", length(unique(df_health$organisation)), "\n",
   "  Organisation in possibly health related:",  length(unique(df_health_possibly$organisation)), "\n",
   "  Exported: output/sources_parsed.csv, output/df_health.csv"
