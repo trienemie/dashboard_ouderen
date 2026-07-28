@@ -219,7 +219,7 @@ Excel <- split(df_health, df_health$organisation) |>
 # tabbladnamen mogen max. 31 tekens zijn en geen rare symbolen bevatten
 names(Excel) <- substr(gsub("[^a-zA-Z0-9 ]", "_", names(Excel)), 1, 31)
 
-write.xlsx(Excel, "health_relevant_per_organisatie.xlsx")
+write.xlsx(Excel, "health_relevant_per_organisation.xlsx")
 
 df_health_possibly <- df_final |>
   filter(str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly))%>%
@@ -237,6 +237,16 @@ filter(End.period >= 2023 | is.na(End.period)) |>
     provinces_in_figures
   )|>
   arrange(organisation)
+
+Excel2 <- split(df_health_possibly, df_health_possibly$organisation) |>
+  lapply(function(d) select(d, -organisation))
+
+# tabbladnamen mogen max. 31 tekens zijn en geen rare symbolen bevatten
+names(Excel2) <- substr(gsub("[^a-zA-Z0-9 ]", "_", names(Excel2)), 1, 31)
+
+write.xlsx(Excel2, "possibly_health_relevant_per_organisation.xlsx")
+
+
 
 
 df_health_older <- df_final |>
@@ -256,11 +266,15 @@ df_health_older <- df_final |>
   )|>
   arrange(organisation)
 
-# Split into one data frame per organisation for exploratory use
-for (org in unique(df_health_possibly$organisation)) {
-  obj_name <- paste0("df_psbl_", tolower(gsub("[^a-zA-Z0-9]", "_", org)))
-  assign(obj_name, df_health_possibly |> filter(organisation == org)|> select(-organisation))
-}
+
+Excel3 <- split(df_health_older, df_health_older$organisation) |>
+  lapply(function(d) select(d, -organisation))
+
+# tabbladnamen mogen max. 31 tekens zijn en geen rare symbolen bevatten
+names(Excel3) <- substr(gsub("[^a-zA-Z0-9 ]", "_", names(Excel3)), 1, 31)
+
+write.xlsx(Excel, "older_health_relevant_per_organisation.xlsx")
+
 
 # <<<<<<< HEAD
 # Organisaties = unique(sources$Organisatie)
