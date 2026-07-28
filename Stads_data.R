@@ -199,14 +199,27 @@ df_health <- df_final |>
     Start.period,
     End.period, 
     provinces_in_figures) |>
-  arrange(organisation)
+  arrange(organisation) 
 
 # Split into one data frame per organisation for exploratory use
-for (org in unique(df_health$organisation)) {
-  obj_name <- paste0("df_", tolower(gsub("[^a-zA-Z0-9]", "_", org)))
-  assign(obj_name, df_health |> filter(organisation == org)|> select(-organisation))
-}
+# for (org in unique(df_health$organisation)) {
+#   obj_name <- paste0("df_", tolower(gsub("[^a-zA-Z0-9]", "_", org)))
+#   assign(obj_name, df_health |> filter(organisation == org)|> select(-organisation))
+# }
+# 
 
+
+library(openxlsx)
+library(dplyr)
+
+# split het dataframe in een lijst van dataframes, één per organisatie
+Excel <- split(df_health, df_health$organisation) |>
+  lapply(function(d) select(d, -organisation))
+
+# tabbladnamen mogen max. 31 tekens zijn en geen rare symbolen bevatten
+names(Excel) <- substr(gsub("[^a-zA-Z0-9 ]", "_", names(Excel)), 1, 31)
+
+write.xlsx(Excel, "health_relevant_per_organisatie.xlsx")
 
 df_health_possibly <- df_final |>
   filter(str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly))%>%
@@ -284,6 +297,7 @@ write.csv(sources, here::here("output", "sources_parsed.csv"), row.names = FALSE
 #   subdivision_1/2/3    — provider sub-levels; NA if absent
 write.csv(df_health, here::here("output", "df_health.csv"), row.names = FALSE)
 write.csv(df_health_possibly, here::here("output", "df_health_possible.csv"), row.names = FALSE)
+
 
 # ============================================================
 
