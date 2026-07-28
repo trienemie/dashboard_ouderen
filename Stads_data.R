@@ -227,8 +227,8 @@ filter(End.period >= 2023 | is.na(End.period)) |>
 
 
 df_health_older <- df_final |>
-  filter(str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly)|str_to_lower(health_organisations_possibly))%>%
-  filter(End.period <= 2023 | is.na(End.period)) |>
+  filter(str_to_lower(organisation) %in% str_to_lower(health_organisations)|str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly))%>%
+  filter(End.period < 2023 | is.na(End.period)) |>
   select(
     organisation, 
     Code,
