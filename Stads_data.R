@@ -221,6 +221,35 @@ names(Excel) <- substr(gsub("[^a-zA-Z0-9 ]", "_", names(Excel)), 1, 31)
 
 write.xlsx(Excel, "health_relevant_per_organisation.xlsx")
 
+
+#### Deze Excel toevoegen aan bestaande Excel indicatoren_selectie
+
+# Bestaand Excel-bestand inladen als workbook-object (behoudt bestaande tabbladen)
+
+
+wb <- loadWorkbook("indicatoren_selectie.xlsx")
+
+for (naam in names(Excel)) {
+  
+  nieuwe_naam <- naam
+  teller <- 2
+  
+  # Zolang de naam al bestaat, teller erachter plakken en opnieuw checken
+  while (nieuwe_naam %in% names(wb)) {
+    suffix <- as.character(teller)
+    # zorg dat totale naam max. 31 tekens blijft
+    nieuwe_naam <- paste0(substr(naam, 1, 31 - nchar(suffix)), suffix)
+    teller <- teller + 1
+  }
+  
+  addWorksheet(wb, nieuwe_naam)
+  writeData(wb, nieuwe_naam, Excel[[naam]])
+}
+
+saveWorkbook(wb, "indicatoren_selectie2.xlsx", overwrite = TRUE)
+
+
+
 df_health_possibly <- df_final |>
   filter(str_to_lower(organisation) %in% str_to_lower(health_organisations_possibly))%>%
 filter(End.period >= 2023 | is.na(End.period)) |>
@@ -245,8 +274,6 @@ Excel2 <- split(df_health_possibly, df_health_possibly$organisation) |>
 names(Excel2) <- substr(gsub("[^a-zA-Z0-9 ]", "_", names(Excel2)), 1, 31)
 
 write.xlsx(Excel2, "possibly_health_relevant_per_organisation.xlsx")
-
-
 
 
 df_health_older <- df_final |>
