@@ -46,7 +46,7 @@ de data-eigenaars geselecteerd die mogelijk gegevens aanleveren over de gezondhe
 het welzijn van ouderen. Bovendien werden enkel deze variabelen geselecteerd waarvan er gegevens beschikbaar zijn na 2023.Deze selectie gebeurde in nauw overleg met de dienst Gezondheid
 van de Stad Antwerpen en met *Stad in Cijfers*.
 
-De selectie omvat **10 data-eigenaars** en resulteert in een subset van **1.433 variabelen**. 
+De selectie omvat **11 data-eigenaars** en resulteert in een subset van **1.504 variabelen**. 
 Daarnaast worden **3 data-eigenaars** ook verder geïnspecteerd omdat zij mogelijks ook gezondheids-gerelateerde informatie na 2023 van ouderen bevatten. Hierbij gaat het over een subset van **3322 variabelen**.
 **1282** variabelen bevatten mogelijks ook gezonds-gerelateerde informatie over ouderen, maar gegevens zijn maar beschikbaar tot voor 2023. 
 
