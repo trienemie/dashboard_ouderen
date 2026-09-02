@@ -68,5 +68,7 @@ variabele werd aangegeven of deze informatie bevat over ouderen:
 ### STAP 5 — Resultaat
 
 Dit resulteerde in een overzichtstabel met alle variabelen waarover de stad beschikt
-met betrekking tot ouderen. Op basis van deze tabel kan een selectie worden gemaakt
-van de meest relevante indicatoren voor het dashboard.
+met betrekking tot ouderen: **686 variabelen**. 
+  
+Op basis van deze tabel kan een verdere selectie worden gemaakt van de meest relevante indicatoren voor het dashboard.
+
