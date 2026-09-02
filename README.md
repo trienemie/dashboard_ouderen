@@ -3,7 +3,7 @@
 ## Exploratie voor dashboard ouderen
 
 **Opgesteld door:** Katrien De Troeyer, epidemioloog, Universiteit Antwerpen  
-**Datum:** juni 2026
+**Datum:** juni - september 2026
 
 ---
 
